@@ -1,2 +1,9 @@
 # Stock-OHLC-Retriever
-This project fetches OHLC data for k past years during the user define interval for the list of stocks provided and creates a directory of excel and CSV files for the fetched data. Investors can use this program to fetch and save historical data in custom time intervals and custom OHLC periods as per their needs.
+A Python utility to fetch historical OHLC (Open, High, Low, Close) data for multiple stocks using yfinance. Designed for investors, analysts, and developers who need structured, time-bounded market data for backtesting, research, or portfolio tracking.
+
+🚀 Features
+- Retrieve OHLC data for a custom list of tickers
+- Specify time intervals (e.g., 1d, 1wk, 1mo) and historical range (e.g., past 5 years)
+- Save output as both .csv and .xlsx formats
+- Automatically creates organized directories for each ticker
+- Modular design for easy extension and integration
