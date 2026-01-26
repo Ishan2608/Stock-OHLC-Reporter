@@ -1,4 +1,4 @@
-# Stock-OHLC-Retriever
+# Stock-OHLC-Retporter
 A Python utility to fetch historical OHLC (Open, High, Low, Close) data for multiple stocks using yfinance. Designed for investors, analysts, and developers who need structured, time-bounded market data for backtesting, research, or portfolio tracking.
 
 #🚀 Features
