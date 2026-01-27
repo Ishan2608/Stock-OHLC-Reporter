@@ -121,3 +121,54 @@ print(monthly_df[['High', 'Low']].tail())
 yearly_df = wipro.history(period="1y", interval="1d")
 print("\nYearly Data Summary (First 5 rows):")
 print(yearly_df.head())
+
+"""
+6. FUNDAMENTAL ANALYSES
+Three core financial statements:
+    - The Income Statement: <ticker_obj>.financials, and <ticker_obj>.quaterly_financials
+    - Balance Sheet: <ticker_obj>.balance_sheet, and <ticker_obj>.quarterly_balance_sheet
+    - Cash Flow Statement. <ticker_obj>.cashflow and <ticker_obj>.quarterly_cashflow
+"""
+
+tata_steel = yf.Ticker("TATASTEEL.NS")
+
+"""
+- financials: Returns annual data for the last 4 years.
+- quarterly_financials: Returns data for the last 4 quarters.
+- Rows represent metrics (Revenue, EBITDA, Net Income), columns represent dates.
+"""
+
+# Fetch and display the annual Income Statement
+income_stmt = tata_steel.financials
+
+print_separation("Annual Income Statement (Latest 2 Years):")
+# Use .iloc to slice the first two columns (most recent years)
+
+print(income_stmt.iloc[:, :2])
+# Access a specific metric like 'Total Revenue'
+if 'Total Revenue' in income_stmt.index:
+    latest_revenue = income_stmt.loc['Total Revenue'].iloc[0]
+    print(f"\nLatest Annual Revenue: {latest_revenue}")
+
+"""
+- balance_sheet: Annual snapshot of Assets, Liabilities, and Equity.
+- quarterly_balance_sheet: Snapshot for the last 4 reporting quarters.
+"""
+
+# Fetch quarterly Balance Sheet for Tata Steel
+quarterly_bs = tata_steel.quarterly_balance_sheet
+
+print_separation("Quarterly Balance Sheet (Most Recent Quarter):")
+# Display only the most recent quarter (first column)
+print(quarterly_bs.iloc[:, 0])
+
+"""
+- cashflow: Tracks annual cash movements.
+- quarterly_cashflow: Tracks quarterly cash movements.
+"""
+
+# Fetch annual Cash Flow
+cash_flow = tata_steel.cashflow
+
+print_separation("Annual Cash Flow (Top 5 Rows):")
+print(cash_flow.head(5))
