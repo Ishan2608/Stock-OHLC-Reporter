@@ -1,0 +1,42 @@
+import yfinance as yf
+
+"""
+1. CREATE A TICKER OBJECT
+- The Ticker class is the primary entry point for accessing data related to a specific financial instrument.
+- It acts as an object-oriented wrapper around the Yahoo Finance API for a given symbol.
+- You instantiate it by passing the ticker string (e.g., "AAPL" for Apple Inc. or "BTC-USD" for Bitcoin).
+
+Syntax:
+    import yfinance as yf
+    ticker_object = yf.Ticker("SYMBOL")
+For Indian Stock Market, append the suffic .NS and .BO for NSE and BSE data respectively.
+Example:
+    ticker_NSE = yf.Ticker('TCS.NS')
+    ticker_BSE = yf.Ticker('TCS.BO')
+
+Use `.info` propertyfor getting information about the stock. This returns a dictionary.
+"""
+ticker_NSE = yf.Ticker('TCS.NS')
+ticker_BSE = yf.Ticker('TCS.BO')
+
+# View all available key in info dictionary
+for key in ticker_NSE.info:
+    print(f"{key}: {ticker_NSE.info[key]}")
+
+print(f"===============================================================================")
+print(f"Current price: {ticker_NSE.info['currentPrice']}")
+print(f"Lowest price in last one year: {ticker_NSE.info['fiftyTwoWeekLow']}")
+print(f"Highest price in last one year: {ticker_NSE.info['fiftyTwoWeekHigh']}")
+print(f"===============================================================================")
+
+"""
+NOTE:
+    - Accessing ticker.info multiple times (as in your loops and print statements) is inefficnet.
+    - It triggers a fresh network request each time, which can lead to rate limiting.
+    - It is more efficient to store the dictionary in a variable first.
+"""
+
+tcs_info = ticker_NSE.info
+print(f"Current price: {tcs_info.get('currentPrice')}")
+print(f"52-Week Low: {tcs_info.get('fiftyTwoWeekLow')}")
+print(f"52-Week High: {tcs_info.get('fiftyTwoWeekHigh')}")
