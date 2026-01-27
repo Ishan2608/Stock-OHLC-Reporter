@@ -1,9 +1,8 @@
-from datetime import datetime
-
 def print_separation(heading):
     print("\n=========================================================")
     print(heading)
     print("=========================================================\n")
+
 
 def display_news_article(article_data):
     # Extract the main content dictionary
