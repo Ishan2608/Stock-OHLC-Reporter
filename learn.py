@@ -1,3 +1,4 @@
+from learn_utility import print_separation
 import yfinance as yf
 
 """
@@ -20,14 +21,18 @@ ticker_NSE = yf.Ticker('TCS.NS')
 ticker_BSE = yf.Ticker('TCS.BO')
 
 # View all available key in info dictionary
-for key in ticker_NSE.info:
-    print(f"{key}: {ticker_NSE.info[key]}")
+def get_all_info_keys(ticker):
+    print_separation("Available Keys in Info Dictionary")
+    for key in ticker.info:
+        print(f"{key}: {ticker.info[key]}")
 
-print(f"===============================================================================")
-print(f"Current price: {ticker_NSE.info['currentPrice']}")
-print(f"Lowest price in last one year: {ticker_NSE.info['fiftyTwoWeekLow']}")
-print(f"Highest price in last one year: {ticker_NSE.info['fiftyTwoWeekHigh']}")
-print(f"===============================================================================")
+# get_all_info_keys(ticker_NSE)
+
+# print(f"===============================================================================")
+# print(f"Current price: {ticker_NSE.info['currentPrice']}")
+# print(f"Lowest price in last one year: {ticker_NSE.info['fiftyTwoWeekLow']}")
+# print(f"Highest price in last one year: {ticker_NSE.info['fiftyTwoWeekHigh']}")
+# print(f"===============================================================================")
 
 """
 NOTE:
@@ -37,6 +42,23 @@ NOTE:
 """
 
 tcs_info = ticker_NSE.info
+print_separation("Accessing Info Keys")
+print(f"Complete Company Name: {tcs_info.get('longName')}")
+print(f"Type: {tcs_info.get('typeDisp')}")
+print(f"Currency: {tcs_info.get('financialCurrency')}")
 print(f"Current price: {tcs_info.get('currentPrice')}")
 print(f"52-Week Low: {tcs_info.get('fiftyTwoWeekLow')}")
 print(f"52-Week High: {tcs_info.get('fiftyTwoWeekHigh')}")
+print(f"52-Week Change %: {tcs_info.get('fiftyTwoWeekChangePercent')}")
+# print(f"52-Week High: {tcs_info.get('')}")
+
+"""
+2. UPCOMING FINANCIAL EVENTS FOR THE TICKER
+- The .calendar property provides a dictionary of upcoming corporate events.
+- Such as earnings announcement dates and ex-dividend dates.
+"""
+
+cal = ticker_NSE.calendar
+print_separation("Upcoming Financial Events")
+for k,v in cal.items():
+    print(f"{k}: {v}")
