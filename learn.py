@@ -1,5 +1,6 @@
-from learn_utility import print_separation
+import json
 import yfinance as yf
+from learn_utility import print_separation, display_news_article
 
 """
 1. CREATE A TICKER OBJECT
@@ -62,3 +63,24 @@ cal = ticker_NSE.calendar
 print_separation("Upcoming Financial Events")
 for k,v in cal.items():
     print(f"{k}: {v}")
+
+"""
+3. READ NEWS ARTICLES ASSOCIATED WITH THE TICKER
+- The .news property returns a list of dictionaries, where each dictionary represents a recent article.
+- Properties: 'title', 'publisher', 'link', and 'provider_publish_time'.
+- The time is provided in Unix epoch format.
+"""
+
+print_separation('News Articles')
+news = ticker_NSE.news
+article1 = news[0]
+
+print_separation("View a Single Article Dictionary")
+formatted_json = json.dumps(article1, indent=4)
+print(formatted_json)
+
+print_separation("View a Single Formatted Article")
+display_news_article(article1)
+
+# for article in news:
+#     display_news_article(article)
