@@ -1,6 +1,11 @@
 import json
+import pandas as pd
 import yfinance as yf
 from learn_utility import print_separation, display_news_article
+
+# pd.set_option('display.max_rows', None)
+# pd.set_option('display.max_columns', None)
+# pd.set_option('display.width', None)
 
 """
 1. CREATE A TICKER OBJECT
@@ -84,3 +89,35 @@ display_news_article(article1)
 
 # for article in news:
 #     display_news_article(article)
+
+"""
+5. HISTORICAL DATA
+- Use the .history() method to retrieve OHLCV data.
+- Returns a pandas DataFrame with Date as the index.
+- Automatically adjusts for stock splits and dividends by default (auto_adjust=True).
+
+Examples:
+- Today's price: Uses period='1d' with small intervals like '1m'.
+- 30-day price: Uses period='1mo' with '1d' intervals.
+- 1-year price: Uses period='1y' with '1d' intervals.
+"""
+# Initialize Ticker for Wipro
+wipro = yf.Ticker("WIPRO.NS")
+
+print_separation(f"Fetch Historical Data for {wipro.info['longName']}")
+
+# Fetching today's price data (Intraday)
+# Note: 1m interval data is only available for the last 7 days.
+today_df = wipro.history(period="1d", interval="1m")
+current_price = today_df['Close'].iloc[-1] if not today_df.empty else "N/A"
+print(f"Current Wipro Price (NSE): {current_price}")
+
+# Fetching previous 30 days data
+monthly_df = wipro.history(period="1mo", interval="1d")
+print("\nLast 30 Days High/Low:")
+print(monthly_df[['High', 'Low']].tail())
+
+# Fetching 1 year data
+yearly_df = wipro.history(period="1y", interval="1d")
+print("\nYearly Data Summary (First 5 rows):")
+print(yearly_df.head())
