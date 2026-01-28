@@ -21,6 +21,7 @@ from learn_utility import display_news_article, print_separation
 Syntax:
     import yfinance as yf
     ticker_object = yf.Ticker("SYMBOL")
+
 For Indian Stock Market, append the suffic .NS and .BO for NSE and BSE data respectively.
 Example:
     ticker_NSE = yf.Ticker('TCS.NS')
@@ -153,6 +154,7 @@ tata_steel = yf.Ticker("TATASTEEL.NS")
 
 # Fetch and display the annual Income Statement
 income_stmt = tata_steel.financials
+q_income_stmt = tata_steel.quarterly_financials
 
 print_separation("Annual Income Statement (Latest 2 Years):")
 # Use .iloc to slice the first two columns (most recent years)
@@ -169,7 +171,7 @@ if "Total Revenue" in income_stmt.index:
 - quarterly_balance_sheet: Snapshot for the last 4 reporting quarters.
 """
 
-# Fetch quarterly Balance Sheet for Tata Steel
+annual_bs = tata_steel.balance_sheet
 quarterly_bs = tata_steel.quarterly_balance_sheet
 
 print_separation("Quarterly Balance Sheet (Most Recent Quarter):")
@@ -183,6 +185,120 @@ print(quarterly_bs.iloc[:, 0])
 """
 # Fetch annual Cash Flow
 cash_flow = tata_steel.cashflow
+quaterly_cash_flow = tata_steel.quarterly_cashflow
 
 print_separation("Annual Cash Flow (Top 5 Rows):")
 print(cash_flow.head(5))
+
+# %%
+"""
+7. CORPORATE ACTIONS
+Corporate actions are events initiated by a public company that bring material change to the stock.
+The two most common are Dividends (cash distribution to shareholders) and
+Stock Splits (increasing the number of shares while lowering the price per share).
+
+- ticker_object.actions -> # Returns a combined DataFrame of Dividends and Splits
+- ticker_object.dividends -> # Returns only Dividends
+- ticker_object.splits -> # Returns only Stock Splits
+"""
+
+itc = yf.Ticker("ITC.NS")
+print_separation(f"Corporate Actions for {itc.info.get('longName')} are:")
+
+actions = itc.actions
+divs = itc.dividends
+splits = itc.splits
+
+if not actions.empty:
+    print("Recent Corporate Actions (Latest 5):")
+    print(actions.tail(5))
+
+
+if not divs.empty:
+    print(f"\nLast Dividend Amount: {divs.iloc[-1]} {itc.info.get('currency')}")
+
+if not splits.empty:
+    print("\nHistorical Stock Splits:")
+    print(splits)
+else:
+    print("\nNo historical stock splits found for this ticker.")
+# %%
+"""
+8. ANALYST RECOMMENDATIONS & PRICE TARGETS
+- .recommendations_summary: Returns a table showing counts of Strong Buy, Buy, Hold, and Sell.
+- .info: Contains price targets like 'targetMeanPrice', 'targetHighPrice', and 'targetLowPrice'.
+- Analyst coverage varies; mid-cap or small-cap Indian stocks may have limited or no data.
+"""
+
+sbi = yf.Ticker("SBIN.NS")
+
+print_separation(f"Analyst Insights for {sbi.info.get('longName')}")
+
+# 1. Price Targets
+sbi_info = sbi.info
+print(f"Current Price: {sbi_info.get('currentPrice')}")
+print(f"Mean Target Price: {sbi_info.get('targetMeanPrice')}")
+print(f"Target High: {sbi_info.get('targetHighPrice')}")
+print(f"Target Low: {sbi_info.get('targetLowPrice')}")
+
+# 2. Recommendation Summary
+rec_summary = sbi.recommendations_summary
+if rec_summary is not None:
+    print("\nRecommendation Summary Counts:")
+    print(rec_summary)
+else:
+    print("\nNo analyst recommendation summary found.")
+
+# %%
+"""
+9. MAJOR HOLDERS AND INSTITUTIONAL OWNERSHIP
+- .major_holders: Returns a DataFrame showing ownership percentages (e.g., % held by insiders).
+- .institutional_holders: Returns a DataFrame of top institutional investors and their shares.
+- .mutualfund_holders: Returns a DataFrame of top mutual funds invested in the company.
+- Note: This data is updated periodically based on regulatory filings (like SEBI filings in India).
+"""
+
+# Initialize Ticker for HDFC Bank
+hdfc = yf.Ticker("HDFCBANK.NS")
+
+print_separation(f"Ownership Structure: {hdfc.info.get('longName')}")
+
+major = hdfc.major_holders
+insts = hdfc.institutional_holders
+mutual = hdfc.mutualfund_holders
+
+print("Major Holders Summary:")
+print(major)
+
+if insts is not None:
+    print("Top 5 major institutional holders")
+    print(insts.head(5))
+
+if mutual is not None:
+    print("Top 5 major mutual funds holders")
+    print(mutual.head(5))
+
+# %%
+"""
+10. SUSTAINABILITY (ESG) SCORES
+- .sustainability: Provides scores for Environment, Social, and Governance risk.
+- Total ESG Risk score: A lower score indicates lower risk.
+- Percentile: Shows how the company ranks compared to global peers in the same industry.
+- This data is provided to Yahoo Finance by Sustainalytics.
+"""
+
+infy = yf.Ticker("INFY.NS")
+
+print_separation(f"Sustainability Data for {infy.info.get('longName')}")
+
+esg_data = infy.sustainability
+
+if esg_data is not None:
+    print("ESG Risk Scores & Ratings:")
+    print(esg_data)
+
+    # Accessing specific score if needed
+    if "totalEsg" in esg_data.index:
+        print(f"\nTotal ESG Risk Score: {esg_data.loc['totalEsg', 'Value']}")
+else:
+    print("ESG/Sustainability data is not available for this ticker.")
